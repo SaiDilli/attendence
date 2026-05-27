@@ -76,12 +76,16 @@ app.get("/dashboard", (req, res) => {
 // 👉 SAVE attendance into PostgreSQL
 app.post("/attendance", async (req, res) => {
   console.log("Attendance route triggered");
-  try {
 
-    await pool.query(
+  try {
+    console.log("Current User:", currentUser);
+
+    const result = await pool.query(
       "INSERT INTO attendance (username) VALUES ($1)",
       [currentUser]
     );
+
+    console.log("Attendance saved:", result.rowCount);
 
     res.send(`
     <html>
@@ -99,11 +103,10 @@ app.post("/attendance", async (req, res) => {
     `);
 
   } catch (err) {
-    console.error(err);
+    console.error("DATABASE ERROR:", err);
     res.send("Database Error ❌");
   }
 });
-
 
 // start server
 const PORT = process.env.PORT || 3000;
