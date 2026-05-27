@@ -108,6 +108,19 @@ app.post("/attendance", async (req, res) => {
   }
 });
 
+app.get("/records", async (req, res) => {
+  try {
+    const result = await pool.query(
+      "SELECT * FROM attendance ORDER BY id DESC"
+    );
+
+    res.json(result.rows);
+  } catch (err) {
+    console.error(err);
+    res.send("Error fetching records");
+  }
+});
+
 // start server
 const PORT = process.env.PORT || 3000;
 
